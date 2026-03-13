@@ -1,0 +1,37 @@
+<style>
+  body { font-family: sans-serif; background: #121212; color: white; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
+  .card { border: 1px solid #333; padding: 15px; border-radius: 10px; background: #1e1e1e; text-align: center; }
+  .btn { background: #00ff00; color: black; padding: 10px; border: none; cursor: pointer; font-weight: bold; }
+  #payment-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; padding: 20px; border: 2px solid #00ff00; }
+</style>
+
+<h1>nadila ofc store</h1>
+<div class="grid">
+  <% products.forEach(p => { %>
+    <div class="card">
+      <h3><%= p.name %></h3>
+      <p>Rp <%= p.price %></p>
+      <button class="btn" onclick="openPay('<%= p.id %>', '<%= p.name %>')">beli sekarang</button>
+    </div>
+  <% }) %>
+</div>
+
+<div id="payment-modal">
+  <h3>pembayaran: <span id="p-name"></span></h3>
+  <img src="/qris.jpg" width="200"><br><br>
+  <form action="/bayar" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="productId" id="p-id">
+    <label>upload bukti transfer:</label><br>
+    <input type="file" name="bukti" required><br><br>
+    <button type="submit" class="btn">konfirmasi & ambil file</button>
+  </form>
+</div>
+
+<script>
+  function openPay(id, name) {
+    document.getElementById('payment-modal').style.display = 'block';
+    document.getElementById('p-id').value = id;
+    document.getElementById('p-name').innerText = name;
+  }
+</script>
